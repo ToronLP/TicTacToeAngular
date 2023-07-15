@@ -31,7 +31,7 @@ export class BoardComponent implements OnInit{
   }
 
   makeMove(idx: number){
-    if(!this.squares[idx]){
+    if(!this.squares[idx] && this.calculateWinner() == ''){
       this.squares.splice(idx, 1, this.player);
       this.xIsNext = !this.xIsNext;
     }
@@ -53,8 +53,18 @@ export class BoardComponent implements OnInit{
     for(let i = 0; i < lines.length; i++){
       const [a, b, c] = lines[i];
       if(this.squares[a] && this.squares[a] === this.squares[b] && this.squares[a] === this.squares[c]){
-        return this.squares[a];
+        return 'Spieler ' + this.squares[a] + " hat das Spiel gewonnen.";
       }
+    }
+
+    let fieldSetCounter = 0;
+    for(let i = 0; i < 9; i++){
+      if(this.squares[i] != null){
+        fieldSetCounter++;
+      }
+    }
+    if(fieldSetCounter>=9){
+      return 'Keiner hat das Spiel gewonnen.';
     }
     return '';
   }
