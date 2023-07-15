@@ -3,5 +3,9 @@ button {
     width: 100%;
     border: none;
     border-radius: 0;
-    font-size: 5em;
+    font-size: calc(1rem + 6vw);
+}
+
+.aspectRation1to1{
+    aspect-ratio: 1/1;
 }
