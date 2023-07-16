@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 
 @Component({
@@ -6,7 +6,7 @@ import { SwUpdate } from '@angular/service-worker';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent{
   title = 'TicTacToeAngular';
   
   updateAvailable: boolean;
@@ -17,19 +17,6 @@ export class AppComponent implements OnInit {
     this.updateAvailable = false;
     this.updateClient();
   }
-
-  ngOnInit() {
-    window.addEventListener('beforeinstallprompt', (event: Event) => {
-      event.preventDefault(); // Prevent the default prompt
-      const installPrompt = event;
-      // Show a custom install prompt or handle the installation logic
-      // You can use a button or any other UI element to trigger the installation
-    });
-  }
-
-  triggerInstallPrompt() {
-    (window as any).beforeinstallprompt.prompt();
-  }  
 
   updateClient(){
     if(!this.update.isEnabled){
