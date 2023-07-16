@@ -1,23 +1,34 @@
+<div *ngIf="updateAvailable" class="row">
+    <div class="col-12">
+        <ngb-alert [dismissible]="true" type="primary" (closed)="runUpdate()"><h4 class="alert-heading">Warnung!</h4>Wenn Sie diese Info schließen wird das Update herruntergeladen!</ngb-alert>
+    </div>
+</div>
 <div class="container">
     <div class="row">
-        <h1>Aktueller Spieler: {{player}}</h1>
+        <div class="col-12">
+            <h1>Aktueller Spieler: {{player}}</h1>
+        </div>
     </div>
     <div class="row mb-2">
-        <button (click)="newGame()" class="btn btn-primary">Starte ein neues Spiel</button>
+        <div class="col-12">
+            <button (click)="newGame()" class="btn btn-primary w-100">Starte ein neues Spiel</button>
+        </div>
     </div>
 
     <div class="row" *ngIf="winner">
-        <h2>
-            {{winner}}
-        </h2>
+        <div class="col-12">
+            <h2>
+                {{winner}}
+            </h2>
+        </div>
     </div>
 
     <main class="row">
-        <app-square 
-            *ngFor="let val of squares; let i = index"
-            [value]="val"
-            (click)="makeMove(i)"
-            class="col-4 mb-2 mt-2">
-        </app-square>
+            <app-square 
+                *ngFor="let val of squares; let i = index"
+                [value]="val"
+                (click)="makeMove(i)"
+                class="col-4 mb-2 mt-2">
+            </app-square>
     </main>
 </div>

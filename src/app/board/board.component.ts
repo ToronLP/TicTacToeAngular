@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SwUpdate } from '@angular/service-worker';
 
 @Component({
   selector: 'app-board',
@@ -9,11 +10,14 @@ export class BoardComponent implements OnInit{
   squares: any[];
   xIsNext: boolean;
   winner: string;
+  updateAvailable: boolean;
 
-  constructor(){
+  constructor(private update: SwUpdate){
     this.squares = Array();
     this.winner = '';
     this.xIsNext = true;
+    this.updateAvailable = false;
+    this.updateClient();
   };
 
   ngOnInit(): void {
@@ -67,5 +71,25 @@ export class BoardComponent implements OnInit{
       return 'Keiner hat das Spiel gewonnen.';
     }
     return '';
+  }
+
+  updateClient(){
+    if(!this.update.isEnabled){
+      console.log("Not enabled!");
+      return;
+    }
+
+    this.update.available.subscribe((event) => {
+      console.log('current', event.current, 'available', event.available);
+      this.updateAvailable = true;
+    });
+
+    this.update.activated.subscribe((event) => {
+      console.log('previous', event.previous, 'current', event.current);
+    });
+  }
+
+  runUpdate(){
+    this.update.activateUpdate().then(() => location.reload());
   }
 }
