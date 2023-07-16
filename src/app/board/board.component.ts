@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { SwUpdate } from '@angular/service-worker';
 
 @Component({
   selector: 'app-board',
@@ -10,14 +9,13 @@ export class BoardComponent implements OnInit{
   squares: any[];
   xIsNext: boolean;
   winner: string;
-  updateAvailable: boolean;
+  nobodyWon: boolean;
 
-  constructor(private update: SwUpdate){
+  constructor(){
     this.squares = Array();
     this.winner = '';
+    this.nobodyWon = false;
     this.xIsNext = true;
-    this.updateAvailable = false;
-    this.updateClient();
   };
 
   ngOnInit(): void {
@@ -27,6 +25,7 @@ export class BoardComponent implements OnInit{
   newGame(){
     this.squares = Array(9).fill(null);
     this.winner = '';
+    this.nobodyWon = false;
     this.xIsNext = true;
   }
 
@@ -40,7 +39,7 @@ export class BoardComponent implements OnInit{
       this.xIsNext = !this.xIsNext;
     }
 
-    this.winner = this.calculateWinner();
+    this.calculateWinner();
   }
 
   calculateWinner(): string {
@@ -57,7 +56,8 @@ export class BoardComponent implements OnInit{
     for(let i = 0; i < lines.length; i++){
       const [a, b, c] = lines[i];
       if(this.squares[a] && this.squares[a] === this.squares[b] && this.squares[a] === this.squares[c]){
-        return 'Spieler ' + this.squares[a] + " hat das Spiel gewonnen.";
+        this.winner = this.squares[a];
+        return this.squares[a];
       }
     }
 
@@ -68,28 +68,9 @@ export class BoardComponent implements OnInit{
       }
     }
     if(fieldSetCounter>=9){
-      return 'Keiner hat das Spiel gewonnen.';
+      this.nobodyWon = true;
+      return 'nobody';
     }
     return '';
-  }
-
-  updateClient(){
-    if(!this.update.isEnabled){
-      console.log("Not enabled!");
-      return;
-    }
-
-    this.update.available.subscribe((event) => {
-      console.log('current', event.current, 'available', event.available);
-      this.updateAvailable = true;
-    });
-
-    this.update.activated.subscribe((event) => {
-      console.log('previous', event.previous, 'current', event.current);
-    });
-  }
-
-  runUpdate(){
-    this.update.activateUpdate().then(() => location.reload());
   }
 }
